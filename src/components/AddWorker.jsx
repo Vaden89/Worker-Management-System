@@ -34,7 +34,7 @@ export const AddWorker = () => {
       try {
         const response = await WorkerService.getAllWorkers();
         console.log(response);
-        const formattedOptions = response.data?.map(
+        const formattedOptions = response.map(
           ({ _id, firstName, lastName }) => ({
             value: _id,
             label: firstName + " " + lastName,
@@ -141,11 +141,14 @@ export const AddWorker = () => {
         >
           <Input placeholder="XXXX-XXXX-XXXX" minLength={12} maxLength={12} />
         </Form.Item>
-        <Form.Item name="supervisor" label="Supervisor?">
-          <Radio.Group>
-            <Radio value={true}>YES</Radio>
-            <Radio value={false}>NO</Radio>
-          </Radio.Group>
+        <Form.Item name="supervisor" label="Who is your supervisor?">
+          <Select
+            showSearch
+            placeholder="Select referrer"
+            optionFilterProp="children"
+            filterOption={filterOption}
+            options={workers}
+          />
         </Form.Item>
         <Form.Item name="superCommission" label="Super Commission?">
           <Radio.Group>

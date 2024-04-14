@@ -4,81 +4,6 @@ import { WorkerService } from "../services/worker.service";
 
 const { Search } = Input;
 
-const columns = [
-  {
-    title: "Full Name",
-    dataIndex: "firstName",
-    key: "firstName",
-    render: (firstName, { lastName }) => <p>{firstName + " " + lastName} </p>,
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    key: "email",
-  },
-  {
-    title: "City",
-    dataIndex: "city",
-    key: "city",
-  },
-  {
-    title: "IBAN",
-    dataIndex: "iban",
-    key: "iban",
-  },
-  {
-    title: "Street",
-    dataIndex: "street",
-    key: "street",
-  },
-  {
-    title: "Lvl2",
-    dataIndex: "lvl2",
-    key: "lvl2",
-  },
-  {
-    title: "Lvl3",
-    dataIndex: "lvl3",
-    key: "lvl3",
-  },
-  {
-    title: "Supervisor",
-    dataIndex: "supervisor",
-    key: "supervisor",
-    render: (bool) => <span>{bool === true ? "YES" : "NO"}</span>,
-  },
-  {
-    title: "Super Commission",
-    dataIndex: "superCommission",
-    key: "superCommission",
-    render: (bool) => <span>{bool === true ? "YES" : "NO"}</span>,
-  },
-  {
-    title: "Brought by",
-    dataIndex: "broughtByLvl1",
-    key: "broughtByLvl1",
-    render: (value) => <span>{value === null ? "Nobody" : value}</span>,
-  },
-  {
-    title: "Action",
-    dataIndex: "action",
-    key: "action",
-    render: () => (
-      <Select
-        onClick={(e) => e.stopPropagation()}
-        placeholder="manage"
-        options={[
-          { label: "Edit", value: "edit" },
-          { label: "Delete", value: "delete" },
-        ]}
-        style={{ color: "#1677ff", width: 100 }}
-      >
-        manage
-      </Select>
-    ),
-  },
-];
-
 export const ViewWorkers = () => {
   const [workers, setWorkers] = useState([]);
   const [searchField, setSearchField] = useState("");
@@ -105,6 +30,99 @@ export const ViewWorkers = () => {
       return fullName?.toLowerCase().includes(searchField.toLowerCase());
     });
   }
+
+  const columns = [
+    {
+      title: "Full Name",
+      dataIndex: "firstName",
+      key: "firstName",
+      render: (firstName, { lastName }) => <p>{firstName + " " + lastName} </p>,
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "City",
+      dataIndex: "city",
+      key: "city",
+    },
+    {
+      title: "IBAN",
+      dataIndex: "iban",
+      key: "iban",
+    },
+    {
+      title: "Street",
+      dataIndex: "street",
+      key: "street",
+    },
+    {
+      title: "Lvl2",
+      dataIndex: "lvl2",
+      key: "lvl2",
+    },
+    {
+      title: "Lvl3",
+      dataIndex: "lvl3",
+      key: "lvl3",
+    },
+    {
+      title: "Supervisor",
+      dataIndex: "supervisor",
+      key: "supervisor",
+      render: (text) => (
+        <span>
+          {filteredWorkers?.map((worker) => {
+            return worker._id === text
+              ? worker.firstName + " " + worker.lastName
+              : "";
+          })}
+        </span>
+      ),
+    },
+    {
+      title: "Super Commission",
+      dataIndex: "superCommission",
+      key: "superCommission",
+      render: (bool) => <span>{bool === true ? "YES" : "NO"}</span>,
+    },
+    {
+      title: "Brought by",
+      dataIndex: "broughtByLvl1",
+      key: "broughtByLvl1",
+      render: (text) => (
+        <span>
+          {text === null
+            ? "Nobody"
+            : filteredWorkers?.map((worker) => {
+                return worker._id === text
+                  ? worker.firstName + " " + worker.lastName
+                  : "";
+              })}
+        </span>
+      ),
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+      render: () => (
+        <Select
+          onClick={(e) => e.stopPropagation()}
+          placeholder="manage"
+          options={[
+            { label: "Edit", value: "edit" },
+            { label: "Delete", value: "delete" },
+          ]}
+          style={{ color: "#1677ff", width: 100 }}
+        >
+          manage
+        </Select>
+      ),
+    },
+  ];
 
   return (
     <div>
