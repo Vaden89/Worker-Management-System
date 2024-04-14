@@ -14,7 +14,7 @@ export const AddWorker = () => {
       setLoading(true);
       const response = await WorkerService.createNewWorker(formData);
       console.log("from the component", response);
-      success("Success", response?.message, () => {});
+      success("Success", response?.data?.message, () => {});
     } catch (e) {
       const { response } = e;
       if (response.status === 400) {

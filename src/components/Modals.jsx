@@ -1,4 +1,6 @@
-import { Modal } from "antd";
+import { Modal, Form, Input } from "antd";
+import { WorkerService } from "../services/worker.service";
+import { useState } from "react";
 
 /**
  * Displays a modal with a success message.
@@ -18,6 +20,7 @@ export const success = (title, content, handleOk) => {
     title: title,
     content: content,
     onOk: handleOk,
+    centered: true,
   });
 };
 
@@ -39,5 +42,83 @@ export const error = (title, content, handleOk) => {
     title: title,
     content: content,
     onOk: handleOk,
+    centered: true,
   });
+};
+
+export const EditWorker = ({ open, onCancel, selectedUser, editForm }) => {
+  const [loading, setLoading] = useState(false);
+
+  const submitForm = async () => {
+    try {
+      setLoading(true);
+      const values = await editForm.validateFields();
+      const response = await WorkerService.updateWorker(
+        selectedUser._id,
+        values
+      );
+      if (response.statusText === "OK") {
+        onCancel();
+        success("Success", "You have successfully edited a record", () => null);
+      }
+    } catch (e) {
+      console.log(e);
+      error(
+        "Error",
+        "Failed to edit user record. Please try again",
+        () => null
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Modal
+      title={`Edit ${selectedUser?.firstName}'s record`}
+      centered
+      open={open}
+      onOk={submitForm}
+      onCancel={onCancel}
+      okText="Save"
+      okButtonProps={{ loading: loading }}
+      cancelButtonProps={{ disabled: loading }}
+    >
+      <Form
+        size="large"
+        form={editForm}
+        name="edit-worker"
+        layout="vertical"
+        autoComplete="off"
+        style={{
+          maxWidth: 600,
+        }}
+      >
+        <Form.Item
+          name="firstName"
+          label="First Name"
+          rules={[
+            {
+              required: true,
+              message: "Please enter first name",
+            },
+          ]}
+        >
+          <Input placeholder="John" />
+        </Form.Item>
+        <Form.Item
+          name="lastName"
+          label="Last Name"
+          rules={[
+            {
+              required: true,
+              message: "Please enter last name",
+            },
+          ]}
+        >
+          <Input placeholder="Doe" />
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
 };

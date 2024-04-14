@@ -1,6 +1,6 @@
 export const resources = {
   createWorker: "/workers/add",
   getAllWorkers: "/workers/get",
-  updateWorker: "/workers/update",
+  updateWorker: "/workers",
   deleteWorker: "/workers/delete",
 };
