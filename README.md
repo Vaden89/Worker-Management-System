@@ -1,6 +1,6 @@
 # Worker Management Frontend
 
-This frontend application is designed for managing worker data. It is built using React, Ant Design for the user interface components, and Axios for handling HTTP requests.
+This frontend application is designed for managing worker data. It is built using React, Ant Design for the user interface components, and appwrite for BAAS
 
 ## Features
 
@@ -21,7 +21,7 @@ Follow these steps to set up the frontend locally:
 1. **Clone the frontend repository:**
 
    ```bash
-   git clone https://github.com/chukusuccess/worker-management-frontend.git
+   git clone https://github.com/vaden89/worker-management-frontend.git
    cd worker-management-frontend
    ```
 
@@ -31,15 +31,15 @@ Follow these steps to set up the frontend locally:
    npm install
    ```
 
-3. **Clone the backend repository:**
+3. **Set up an appwrite account:**
 
-   ```bash
-   git clone https://github.com/chukusuccess/worker-management-backend.git
-   cd worker-management-backend
+   ```
+   https://cloud.appwrite.io/
+   Create a database, a collection and the necessary fields to fit your needs
    ```
 
 4. **Connect frontend to backend:**
-   The frontend connects to the backend at localhost:3000
+   Add your projectId, databaseId, collectionId to the env variables and your set to go
 
 ## Usage
 

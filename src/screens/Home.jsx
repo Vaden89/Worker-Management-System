@@ -70,7 +70,7 @@ export const Home = () => {
             textAlign: "center",
           }}
         >
-          Worker Management System &copy; Chuku Success
+          Worker Management System &copy; Isaac Shosanya
         </Footer>
       </Layout>
     </Layout>

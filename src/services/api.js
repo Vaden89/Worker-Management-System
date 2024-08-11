@@ -1,12 +1,13 @@
-import axios from "axios";
+import { Client, Databases, ID } from "appwrite";
 
-export const api = axios.create({
-  baseURL: process.env.REACT_APP_WORKER_MGT_URL ?? "http://localhost:8000",
-  timeout: 10000,
-  headers: { "Content-Type": "application/json" },
-});
+const projectID = process.env.REACT_APP_PUBLIC_PROJECTID;
 
-//TODO: make auth and export this to set tokens
-// const setAuthorizationToken = (token) => {
-//   api.defaults.headers.common.Authorization = `Bearer ${token}`;
-// };
+const client = new Client()
+  .setEndpoint("https://cloud.appwrite.io/v1")
+  .setProject(projectID);
+
+export const generateID = ID.unique();
+
+export const databaseClient = new Databases(client);
+export const databaseID = process.env.REACT_APP_PUBLIC_DATABASEID;
+export const collectionID = process.env.REACT_APP_PUBLIC_COLLECTIONID;

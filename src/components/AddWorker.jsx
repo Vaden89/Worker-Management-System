@@ -1,25 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Button, Form, Input, Space, Select, Radio } from "antd";
+import { Button, Form, Input, Space } from "antd";
 import { WorkerService } from "../services/worker.service";
 import { success, error } from "./Modals";
 
 export const AddWorker = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [workers, setWorkers] = useState([]);
 
   const onFinish = async () => {
     const formData = await form.validateFields();
     try {
       setLoading(true);
-      const response = await WorkerService.createNewWorker(formData);
-      console.log("from the component", response);
-      success("Success", response?.data?.message, () => {});
-    } catch (e) {
-      const { response } = e;
-      if (response.status === 400) {
-        error("Error", response.data?.message, () => {});
-      }
+      const response = await WorkerService.CreateWorker(formData);
+    } catch (error) {
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -28,33 +22,6 @@ export const AddWorker = () => {
   const onReset = () => {
     form.resetFields();
   };
-
-  useEffect(() => {
-    const getWorkers = async () => {
-      try {
-        const response = await WorkerService.getAllWorkers();
-        console.log(response);
-        const formattedOptions = response.map(
-          ({ _id, firstName, lastName }) => ({
-            value: _id,
-            label: firstName + " " + lastName,
-          })
-        );
-        setWorkers(formattedOptions);
-      } catch (error) {
-        console.error("Failed to fetch workers:", error);
-      }
-    };
-
-    getWorkers();
-
-    return () => {
-      getWorkers();
-    };
-  }, []);
-
-  const filterOption = (input, option) =>
-    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   return (
     <>
@@ -140,30 +107,6 @@ export const AddWorker = () => {
           ]}
         >
           <Input placeholder="XXXX-XXXX-XXXX" minLength={12} maxLength={12} />
-        </Form.Item>
-        <Form.Item name="supervisor" label="Who is your supervisor?">
-          <Select
-            showSearch
-            placeholder="Select referrer"
-            optionFilterProp="children"
-            filterOption={filterOption}
-            options={workers}
-          />
-        </Form.Item>
-        <Form.Item name="superCommission" label="Super Commission?">
-          <Radio.Group>
-            <Radio value={true}>YES</Radio>
-            <Radio value={false}>NO</Radio>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item name="broughtByLvl1" label="Brought by:">
-          <Select
-            showSearch
-            placeholder="Select referrer"
-            optionFilterProp="children"
-            filterOption={filterOption}
-            options={workers}
-          />
         </Form.Item>
         <Form.Item>
           <Space direction="vertical">

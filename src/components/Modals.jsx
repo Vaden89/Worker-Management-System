@@ -53,12 +53,12 @@ export const EditWorker = ({ open, onCancel, selectedUser, editForm }) => {
     try {
       setLoading(true);
       const values = await editForm.validateFields();
-      const response = await WorkerService.updateWorker(
-        selectedUser._id,
-        values
+      const response = await WorkerService.UpdateWorkerData(
+        values,
+        selectedUser.$id
       );
-      if (response.statusText === "OK") {
-        onCancel();
+      onCancel();
+      if (response.ok) {
         success("Success", "You have successfully edited a record", () => null);
       }
     } catch (e) {

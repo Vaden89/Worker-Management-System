@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Divider, Input, Table, Dropdown, Space, Button, Form } from "antd";
 import { SettingFilled, EditFilled, DeleteFilled } from "@ant-design/icons";
 import { WorkerService } from "../services/worker.service";
-import { EditWorker } from "./Modals";
+import { EditWorker, success, error } from "./Modals";
 
 const { Search } = Input;
 
@@ -17,9 +17,9 @@ export const ViewWorkers = () => {
   useEffect(() => {
     const getWorkers = async () => {
       try {
-        const data = await WorkerService.getAllWorkers();
+        const data = await WorkerService.GetWorkers();
         console.log(data);
-        setWorkers(data);
+        setWorkers(data.documents);
       } catch (error) {
         console.error("Failed to fetch workers:", error);
       }
@@ -43,6 +43,26 @@ export const ViewWorkers = () => {
     setEditModal(false);
   };
 
+  const deleteWorker = async (id) => {
+    try {
+      const response = await WorkerService.DeleteWorker(id);
+      oncancel();
+      if (response.ok) {
+        success(
+          "Success",
+          "You Have successfully deleted a worker",
+          () => null
+        );
+      }
+    } catch (e) {
+      error(
+        "Error",
+        "Failed to delete worker please try again later",
+        () => null
+      );
+    }
+  };
+
   const handleEdit = () => {
     setEditModal(true);
     editForm.setFieldsValue({
@@ -61,7 +81,7 @@ export const ViewWorkers = () => {
     {
       key: "2",
       label: <span>Delete</span>,
-      onClick: () => console.log("deleteee"),
+      onClick: () => deleteWorker(selectedUser.$id),
       icon: <DeleteFilled />,
       danger: true,
     },
@@ -93,52 +113,6 @@ export const ViewWorkers = () => {
       title: "Street",
       dataIndex: "street",
       key: "street",
-    },
-    {
-      title: "Lvl2",
-      dataIndex: "lvl2",
-      key: "lvl2",
-    },
-    {
-      title: "Lvl3",
-      dataIndex: "lvl3",
-      key: "lvl3",
-    },
-    {
-      title: "Supervisor",
-      dataIndex: "supervisor",
-      key: "supervisor",
-      render: (text) => (
-        <span>
-          {filteredWorkers?.map((worker) => {
-            return worker._id === text
-              ? worker.firstName + " " + worker.lastName
-              : "";
-          })}
-        </span>
-      ),
-    },
-    {
-      title: "Super Commission",
-      dataIndex: "superCommission",
-      key: "superCommission",
-      render: (bool) => <span>{bool === true ? "YES" : "NO"}</span>,
-    },
-    {
-      title: "Brought by",
-      dataIndex: "broughtByLvl1",
-      key: "broughtByLvl1",
-      render: (text) => (
-        <span>
-          {text === null
-            ? "Nobody"
-            : filteredWorkers?.map((worker) => {
-                return worker._id === text
-                  ? worker.firstName + " " + worker.lastName
-                  : "";
-              })}
-        </span>
-      ),
     },
     {
       title: "Action",
