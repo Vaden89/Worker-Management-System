@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, Form, Input, Space } from "antd";
 import { WorkerService } from "../services/worker.service";
 import { success, error } from "./Modals";
@@ -12,8 +12,19 @@ export const AddWorker = () => {
     try {
       setLoading(true);
       const response = await WorkerService.CreateWorker(formData);
-    } catch (error) {
-      console.log(error);
+      if (response.ok) {
+        success(
+          "Success",
+          "You Have successfully deleted a worker",
+          () => null
+        );
+      }
+    } catch (e) {
+      error(
+        "Error",
+        "Failed to delete worker please try again later",
+        () => null
+      );
     } finally {
       setLoading(false);
     }
